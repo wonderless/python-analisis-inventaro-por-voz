@@ -62,6 +62,11 @@ df_grouped = df.groupby(['fecha1', 'idProducto', 'nombreProducto']).agg({
     'total': 'sum'
 }).reset_index()
 
+# Filtrar los días con más de 5 registros de ventas
+ventas_por_dia = df_grouped.groupby('fecha1').size()
+dias_validos = ventas_por_dia[ventas_por_dia > 10].index
+df_grouped = df_grouped[df_grouped['fecha1'].isin(dias_validos)]
+
 # Generar características adicionales
 df_grouped['mes'] = df_grouped['fecha1'].dt.month
 df_grouped['dia'] = df_grouped['fecha1'].dt.day
